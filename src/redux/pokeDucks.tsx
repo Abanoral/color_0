@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Dispatch } from 'redux';
 
 // constantes estos seran los estados que se recuperan en la aplicacion
 export interface PokemonsAPI {
@@ -24,7 +25,7 @@ const GET_OBTENER_POKEMONES: string = 'OBTENER_POKEMONES_EXITO';
 // reducer: acepta la lista de pokemons y los envia a las constantes
 export default function pokeReducer(
   state = dataInicial,
-  action: { type: string; payload: any }
+  action: { type: string; payload: PokemonsAPI[] }
 ): InicialDTO {
   switch (action.type) {
     case GET_OBTENER_POKEMONES:
@@ -36,8 +37,8 @@ export default function pokeReducer(
 
 // actions: consume la api
 export const obtenerPokemonesAccion = () => async (
-  dispatch: any,
-  getState: any
+  dispatch: Dispatch,
+  getState: InicialDTO
 ): Promise<any> => {
   try {
     const result = await axios.get(
@@ -47,7 +48,7 @@ export const obtenerPokemonesAccion = () => async (
     // !important -> revisar qué viene del result
     dispatch({
       type: GET_OBTENER_POKEMONES,
-      payload: result.data.result, // aqui se cambia el estado por la respuesta de la api
+      payload: result.data.results, // aqui se cambia el estado por la respuesta de la api
     });
   } catch (error) {
     console.log(error);
